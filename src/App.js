@@ -11,27 +11,60 @@ const App = () => {
   const [currentUser, setCurrentUser] = useState(initialUser)
   const [ editing, setEditing ] = useState(false)
   const addUser = user => {
-    user.id = users.length + 1 
-    setUsers([...users, user ])
+    fetch('http://127.0.0.1:8000/api/student', {
+      method: 'POST',
+      headers: {
+        'content-type': 'application/json'
+      },
+      body: JSON.stringify({name:user.name, email:user.email, phone:user.phone, gender:user.gender})
+    }).then(user => setUsers([...users, user]))
+      
+    // user.id = users.length + 1 
+    // setUsers([...users, user ])
   }
   useEffect(() => {
     fetch('http://127.0.0.1:8000/api/student')
-      .then(res => res.json())
+      .then(res => res.status === 200 ?  res.json() : "api  error")
       .then(json => {
-      setUsers(json.data)
-    })
+        setUsers(json.data)
+      })
   }, [])
+
+
   const deleteUser = id => {
-    setEditing(false)
-    setUsers( users.filter(user => user.id !== id))
+    fetch('http://127.0.0.1:8000/api/student/'+ id, {
+      method: 'DELETE',
+      headers: {
+        'content-type': 'application/json'
+      },
+    }).then( () => {
+          setEditing(false)
+          setUsers( users.filter(user => user.id !== id))
+        } 
+      
+    )
+
   }
+
+
+
   const editUser = user => {
     setEditing(true)
-    setCurrentUser({ id:user.id, name:user.name, email:user.email, phone:user.phone, gender:user.gender, food:user.food })
+    setCurrentUser({ id:user.id, name:user.name, email:user.email, phone:user.phone, gender:user.gender})
   }
   const updateUser = (id, updateUser) => {
-    setEditing(false)
-    setUsers( users.map( user => user.id === id ? updateUser : user ))
+    fetch("http://127.0.0.1:8000/api/student/" + id, {
+      method: 'PUT',
+      headers: {
+        'content-type': 'application/json'
+      },
+      body:JSON.stringify({ id:updateUser.id, name:updateUser.name, email:updateUser.email, phone:updateUser.phone, gender:updateUser.gender})
+    }).then((id) => {
+      setEditing(false)
+      setUsers( users.map( user => user.id === id ? updateUser : user ))
+    }
+    )
+    
   }
   return (
     <div className="container">
