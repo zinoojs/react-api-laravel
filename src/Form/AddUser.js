@@ -11,6 +11,7 @@ const AddUser = props => {
         props.addUser(user)
         setUser(initialUser)
     }
+
     const HandleInput = e => {
         const { name, value } = e.target 
         setUser({ ...user, [name]:value })
@@ -18,9 +19,9 @@ const AddUser = props => {
     return (
         <form action="" onSubmit={ handleSubmit(onSubmit)}>
             <label htmlFor="name">Name</label>
-            <input type="text" name="name" value={user.name} onChange={HandleInput} ref={register({ required: true, minLength: 6 })} />
+            <input type="text" name="name" value={user.name} onChange={HandleInput} ref={register({ required: true, minLength: 2 })} />
             { errors.name && errors.name.type === "required" && <span>required</span> }
-            { errors.name && errors.name.type === "minLength" && <span>minlength is 6 required</span> }
+            { errors.name && errors.name.type === "minLength" && <span>minlength is 2 required</span> }
             <label htmlFor="name">email</label>
             <input type="text" name="email" value={user.email} onChange={HandleInput} /> <br/>
             <label htmlFor="name">phone</label>

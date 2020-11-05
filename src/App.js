@@ -16,11 +16,12 @@ const App = () => {
       headers: {
         'content-type': 'application/json'
       },
-      body: JSON.stringify({name:user.name, email:user.email, phone:user.phone, gender:user.gender})
-    }).then(user => setUsers([...users, user]))
-      
-    // user.id = users.length + 1 
-    // setUsers([...users, user ])
+      body: JSON.stringify({ name:user.name, email:user.email, phone:user.phone, gender:user.gender})
+    })
+      .then((res) => {
+        setUsers([...users, user])
+    })
+
   }
   useEffect(() => {
     fetch('http://127.0.0.1:8000/api/student')
@@ -59,7 +60,7 @@ const App = () => {
         'content-type': 'application/json'
       },
       body:JSON.stringify({ id:updateUser.id, name:updateUser.name, email:updateUser.email, phone:updateUser.phone, gender:updateUser.gender})
-    }).then((id) => {
+    }).then((res) => {
       setEditing(false)
       setUsers( users.map( user => user.id === id ? updateUser : user ))
     }
